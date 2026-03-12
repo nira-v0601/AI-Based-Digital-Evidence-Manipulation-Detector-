@@ -1,4 +1,7 @@
-# digital_evidence_detector
+# AI-Based-Digital-Evidence-Manipulation-Detector-
+AI Marathon 2026 Project
+
+## digital_evidence_detector
 
 A new Flutter project.
 
