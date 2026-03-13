@@ -238,35 +238,128 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       padding: const EdgeInsets.all(24.0),
       child: Column(
         children: [
-          const CircleAvatar(
-            radius: 50,
-            backgroundColor: Colors.blue,
-            child: Icon(Icons.person, size: 60, color: Colors.white),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.blue,
+                    child: Icon(Icons.person, size: 60, color: Colors.white),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Detective Smith",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    "smith.investigations@secure.com",
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
+                  
+                  // --- NEW: PROFILE INFORMATION SECTION ---
+                  const SizedBox(height: 8),
+                  const Text(
+                    "Cyber Crime Investigator",
+                    style: TextStyle(fontSize: 16, color: Colors.blue, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    "Digital Forensics Department",
+                    style: TextStyle(fontSize: 14, color: Colors.blueGrey),
+                  ),
+                  const SizedBox(height: 16),
+                  OutlinedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Edit Profile Actions')));
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.blue,
+                      side: const BorderSide(color: Colors.blue),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    ),
+                    child: const Text('Edit Profile'),
+                  ),
+                  // --- END NEW ---
+
+                  const SizedBox(height: 32),
+
+                  // --- NEW: USER STATISTICS DASHBOARD ---
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        'INVESTIGATOR STATISTICS',
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        childAspectRatio: 1.5,
+                        children: [
+                          _buildStatCard('Total Scans', '342', Icons.scanner, Colors.blue),
+                          _buildStatCard('Authentic Images', '128', Icons.verified_user, Colors.green),
+                          _buildStatCard('Manipulated Images', '214', Icons.warning_amber_rounded, Colors.red),
+                          _buildStatCard('AI Accuracy', '98.5%', Icons.analytics, Colors.deepPurple),
+                        ],
+                      ),
+                    ],
+                  ),
+                  // --- END NEW ---
+
+                  const SizedBox(height: 32),
+
+                  // --- NEW: PROFILE ACTIONS ---
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                       const Text(
+                        'QUICK ACTIONS',
+                        style: TextStyle(
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _buildQuickActionTile(Icons.local_activity, "View Investigator Activity", Colors.indigo),
+                      _buildQuickActionTile(Icons.storage, "Evidence Storage Status", Colors.teal),
+                      _buildQuickActionTile(Icons.info_outline, "Last Scan Information", Colors.orange),
+                    ],
+                  ),
+                  // --- END NEW ---
+                  
+                  const SizedBox(height: 32),
+                  
+                  // EXISTING: ORIGINAL LIST VIEW ITEMS (Migrated to column for scrollability)
+                  Column(
+                    children: [
+                      _buildProfileOption(Icons.history, "Scan History"),
+                      _buildProfileOption(Icons.security, "Security Settings"),
+                      _buildProfileOption(Icons.analytics, "My Reports"),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
           const SizedBox(height: 16),
-          const Text(
-            "Detective Smith",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "smith.investigations@secure.com",
-            style: TextStyle(fontSize: 16, color: Colors.black54),
-          ),
-          const SizedBox(height: 32),
-          Expanded(
-            child: ListView(
-              children: [
-                _buildProfileOption(Icons.history, "Scan History"),
-                _buildProfileOption(Icons.security, "Security Settings"),
-                _buildProfileOption(Icons.analytics, "My Reports"),
-              ],
-            ),
-          ),
           ElevatedButton.icon(
             onPressed: () {
               ref.read(evidenceProvider.notifier).logout();
@@ -299,6 +392,68 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           size: 16,
           color: Colors.blue,
         ),
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$title tapped')));
+        },
+      ),
+    );
+  }
+
+  // --- NEW WIDGET BUILDING METHODS ---
+  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade200),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 4, offset: const Offset(0, 2))
+        ]
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 16),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 10, color: Colors.grey.shade600, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildQuickActionTile(IconData icon, String title, Color iconColor) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(color: iconColor.withOpacity(0.1), shape: BoxShape.circle),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+        title: Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        trailing: Icon(Icons.chevron_right, color: Colors.grey.shade400),
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$title tapped')));
         },

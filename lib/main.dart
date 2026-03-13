@@ -7,8 +7,16 @@ import 'package:digital_evidence_detector/ui/report_screen.dart';
 import 'package:digital_evidence_detector/ui/home_screen.dart';
 import 'package:digital_evidence_detector/ui/profile_screen.dart';
 import 'package:digital_evidence_detector/ui/settings_screen.dart';
-
+import 'package:digital_evidence_detector/ui/upload_screen.dart';
+import 'package:digital_evidence_detector/ui/processing_screen.dart';
+import 'package:digital_evidence_detector/ui/result_screen.dart';
+import 'package:digital_evidence_detector/ui/professional_dashboard_screen.dart';
+import 'package:digital_evidence_detector/ui/professional_profile_screen.dart';
+import 'package:digital_evidence_detector/ui/professional_scan_screen.dart';
+import 'package:digital_evidence_detector/ui/professional_result_screen.dart';
+import 'package:digital_evidence_detector/ui/professional_report_screen.dart';
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: DigitalEvidenceApp()));
 }
 
@@ -31,7 +39,15 @@ class DigitalEvidenceApp extends StatelessWidget {
           centerTitle: false,
         ),
       ),
-      home: const MainRouter(),
+      routes: {
+         '/main': (context) => const MainRouter(),
+         '/professional_dashboard': (context) => const ProfessionalDashboardScreen(),
+         '/professional_profile': (context) => const ProfessionalProfileScreen(),
+         '/professional_scan': (context) => const ProfessionalScanScreen(),
+         '/professional_result': (context) => const ProfessionalResultScreen(),
+         '/professional_report': (context) => const ProfessionalReportScreen(),
+      },
+      initialRoute: '/main',
       debugShowCheckedModeBanner: false,
     );
   }
@@ -59,6 +75,12 @@ class MainRouter extends ConsumerWidget {
         return const ScanningScreen();
       case AppRoute.report:
         return const ReportScreen();
+      case AppRoute.upload:
+        return const UploadScreen();
+      case AppRoute.processing:
+        return const ProcessingScreen();
+      case AppRoute.result:
+        return const ResultScreen();
     }
   }
 }
